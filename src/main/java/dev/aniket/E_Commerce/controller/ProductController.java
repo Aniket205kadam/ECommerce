@@ -3,12 +3,13 @@ package dev.aniket.E_Commerce.controller;
 import dev.aniket.E_Commerce.model.Product;
 import dev.aniket.E_Commerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -21,13 +22,19 @@ public class ProductController {
         this.service = service;
     }
 
-    @GetMapping("/")
-    public String start() {
-        return "Its working fine!";
+    @GetMapping("/products")
+    public ResponseEntity<List<Product>> getAllProducts() {
+        return new ResponseEntity<>(service.getAllProducts(), HttpStatus.OK);
     }
 
-    @GetMapping("/products")
-    public List<Product> getAllProducts() {
-        return service.getAllProducts();
+    @GetMapping("/product/{id}")
+    public ResponseEntity<Product> getProduct(@PathVariable Integer id) {
+        Optional<Product> product = service.getProductById(id);
+
+        //TODO product is not present in the DB
+        if (product.isEmpty())
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        else
+            return new ResponseEntity<>(product.get(), HttpStatus.OK);
     }
 }
