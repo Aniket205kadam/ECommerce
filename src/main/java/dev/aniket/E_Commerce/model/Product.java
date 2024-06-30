@@ -1,10 +1,6 @@
 package dev.aniket.E_Commerce.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,8 +22,14 @@ public class Product {
     private BigDecimal price;
     private String category;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy") //it is control by the UI
     private Date releaseDate;
-    private Boolean available;
-    private Integer quantity;
+    private Boolean productAvailable;
+    private Integer stockQuantity;
+
+//    image
+    private String imageName;
+    private String imageType;
+    @Lob
+    private byte[] imageData;
 }

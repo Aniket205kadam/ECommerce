@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:5173/")
 public class ProductController {
-    private ProductService service;
+    private final ProductService service;
 
     @Autowired
     public ProductController(ProductService service) {
@@ -36,5 +36,17 @@ public class ProductController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         else
             return new ResponseEntity<>(product.get(), HttpStatus.OK);
+    }
+
+    @PostMapping("/product")
+    public ResponseEntity<?> addProduct(@RequestPart Product product,
+                                        @RequestPart MultipartFile imageFile) {
+        System.out.println(product);
+        try {
+            Product afterAddProduct = service.addProductInDB(product, imageFile);
+            return new ResponseEntity<>(afterAddProduct, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
