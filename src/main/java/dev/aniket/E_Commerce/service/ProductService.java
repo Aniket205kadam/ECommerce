@@ -49,4 +49,13 @@ public class ProductService {
         //product is present
         return product.get().getImageData();
     }
+
+    public String getContentTypeByProductId(Integer id) throws Exception {
+        Optional<Product> product = repository.findById(id);
+
+        if (product.isEmpty())
+            throw new Exception("Product not found");
+        //image content type
+        return product.get().getImageType();
+    }
 }

@@ -3,6 +3,7 @@ package dev.aniket.E_Commerce.controller;
 import dev.aniket.E_Commerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,11 @@ public class ImageController {
         try {
             System.out.println("Try to get the image");
             byte[] imageDate = service.getImageByProductId(id);
-            return new ResponseEntity<>(imageDate, HttpStatus.OK);
+//            return new ResponseEntity<>(imageDate, HttpStatus.OK);
+            return ResponseEntity
+                    .ok()
+                    .contentType(MediaType.valueOf(service.getContentTypeByProductId(id)))
+                    .body(imageDate);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
