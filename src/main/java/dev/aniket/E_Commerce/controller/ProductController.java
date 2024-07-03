@@ -49,4 +49,30 @@ public class ProductController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/product/{id}")
+    public ResponseEntity<String> updateProduct(@PathVariable Integer id,
+                                                @RequestPart Product product,
+                                                @RequestPart MultipartFile imageFile) {
+        try {
+            product.setId(id);
+            Product updatedProduct = service.updateProduct(product, imageFile);
+            if (updatedProduct != null)
+                return new ResponseEntity<>("Update successfully", HttpStatus.OK);
+            else
+                return new ResponseEntity<>("Update failed", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<String> deleteProduct(@PathVariable Integer id) {
+        try {
+            service.deleteProductById(id);
+            return new ResponseEntity<>("Product deleted successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

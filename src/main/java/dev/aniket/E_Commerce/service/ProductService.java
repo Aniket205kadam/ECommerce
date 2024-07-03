@@ -58,4 +58,26 @@ public class ProductService {
         //image content type
         return product.get().getImageType();
     }
+
+    public Product updateProduct(Product product, MultipartFile imageFile) throws Exception {
+        //check the product is available or not
+        Optional<Product> isProductExist = getProductById(product.getId());
+        if (isProductExist.isEmpty()) throw new Exception("Product is not found");
+
+        //set the image to the product
+        product.setImageType(imageFile.getContentType());
+        product.setImageName(imageFile.getOriginalFilename());
+        product.setImageData(imageFile.getBytes());
+        //update the product
+        return repository.save(product);
+    }
+
+    public void deleteProductById(Integer id) throws Exception {
+        //check the product is available or not
+        Optional<Product> isProductExist = getProductById(id);
+        if (isProductExist.isEmpty()) throw new Exception("Product is not found");
+
+        //delete the product by id
+        repository.deleteById(id);
+    }
 }
