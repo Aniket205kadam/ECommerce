@@ -2,6 +2,8 @@ package dev.aniket.E_Commerce.controller;
 
 import dev.aniket.E_Commerce.model.Product;
 import dev.aniket.E_Commerce.service.ProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:5173/")
 public class ProductController {
     private final ProductService service;
+    private final Logger LOGGER = LoggerFactory.getLogger(Product.class);
 
     @Autowired
     public ProductController(ProductService service) {
@@ -74,5 +77,14 @@ public class ProductController {
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+//    http://localhost:8080/api/products/search?keyword=${value} //TODO this is my front-end url
+    //this keyword is not coming for the url, we are receives using the @RequestParam
+    @GetMapping("/products/search")
+    public ResponseEntity<List<Product>> searchProducts(@RequestParam String keyword) {
+        LOGGER.info("Search with: " + keyword);
+        List<Product> products = service.searchProductsByKeyword(keyword);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 }

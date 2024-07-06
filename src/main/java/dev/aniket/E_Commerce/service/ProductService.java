@@ -5,10 +5,8 @@ import dev.aniket.E_Commerce.repository.ProductRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.List;
@@ -79,5 +77,11 @@ public class ProductService {
 
         //delete the product by id
         repository.deleteById(id);
+    }
+
+    public List<Product> searchProductsByKeyword(String keyword) {
+        List<Product> products = repository.searchProducts(keyword);
+//        System.out.println("Print: " + products);
+        return products;
     }
 }
